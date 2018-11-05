@@ -55,7 +55,8 @@ const cssRegex = /\.css$/;
 const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
-
+const lessRegex = /\.(scss|less)$/;
+const lessModuleRegex = /\.module\.(scss|less)$/;
 // common function to get style loaders
 const getStyleLoaders = (cssOptions, preProcessor) => {
   const loaders = [
@@ -368,6 +369,24 @@ module.exports = {
               getLocalIdent: getCSSModuleLocalIdent,
             }),
           },
+            {
+                test: lessRegex,
+                exclude: lessModuleRegex,
+                use: getStyleLoaders({ importLoaders: 3 }, 'less-loader'),
+            },
+            // Adds support for CSS Modules, but using SASS
+            // using the extension .module.scss or .module.sass
+            {
+                test: lessModuleRegex,
+                use: getStyleLoaders(
+                    {
+                        importLoaders: 3,
+                        modules: true,
+                        getLocalIdent: getCSSModuleLocalIdent,
+                    },
+                    'less-loader'
+                ),
+            },
           // Opt-in support for SASS. The logic here is somewhat similar
           // as in the CSS routine, except that "sass-loader" runs first
           // to compile SASS files into CSS.
