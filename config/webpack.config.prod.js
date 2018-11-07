@@ -55,8 +55,8 @@ const cssRegex = /\.css$/;
 const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
-const lessRegex = /\.(scss|less)$/;
-const lessModuleRegex = /\.module\.(scss|less)$/;
+const lessRegex = /\.less$/;
+const lessModuleRegex = /\.module\.less$/;
 // common function to get style loaders
 const getStyleLoaders = (cssOptions, preProcessor) => {
   const loaders = [
@@ -340,6 +340,16 @@ module.exports = {
               sourceMaps: false,
             },
           },
+            {
+                test: /\.less$/,
+                use: [{
+                    loader: "style-loader" // creates style nodes from JS strings
+                }, {
+                    loader: "css-loader" // translates CSS into CommonJS
+                }, {
+                    loader: "less-loader" // compiles Less to CSS
+                }]
+            },
           // "postcss" loader applies autoprefixer to our CSS.
           // "css" loader resolves paths in CSS and adds assets as dependencies.
           // `MiniCSSExtractPlugin` extracts styles into CSS
@@ -369,24 +379,6 @@ module.exports = {
               getLocalIdent: getCSSModuleLocalIdent,
             }),
           },
-            {
-                test: lessRegex,
-                exclude: lessModuleRegex,
-                use: getStyleLoaders({ importLoaders: 3 }, 'less-loader'),
-            },
-            // Adds support for CSS Modules, but using SASS
-            // using the extension .module.scss or .module.sass
-            {
-                test: lessModuleRegex,
-                use: getStyleLoaders(
-                    {
-                        importLoaders: 3,
-                        modules: true,
-                        getLocalIdent: getCSSModuleLocalIdent,
-                    },
-                    'less-loader'
-                ),
-            },
           // Opt-in support for SASS. The logic here is somewhat similar
           // as in the CSS routine, except that "sass-loader" runs first
           // to compile SASS files into CSS.
@@ -432,7 +424,7 @@ module.exports = {
             // it's runtime that would otherwise be processed through "file" loader.
             // Also exclude `html` and `json` extensions so they get processed
             // by webpacks internal loaders.
-            exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
+            exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/,/\.less$/],
             options: {
               name: 'static/media/[name].[hash:8].[ext]',
             },
@@ -441,6 +433,7 @@ module.exports = {
           // Make sure to add the new loader(s) before the "file" loader.
         ],
       },
+
     ],
   },
   plugins: [

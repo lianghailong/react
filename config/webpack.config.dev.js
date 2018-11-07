@@ -318,7 +318,7 @@ module.exports = {
             {
                 test: lessRegex,
                 exclude: lessModuleRegex,
-                use: getStyleLoaders({ importLoaders: 3 }, 'less-loader'),
+                use: getStyleLoaders({ importLoaders: 2 }, 'less-loader'),
             },
             // Adds support for CSS Modules, but using SASS
             // using the extension .module.scss or .module.sass
@@ -326,7 +326,7 @@ module.exports = {
                 test: lessModuleRegex,
                 use: getStyleLoaders(
                     {
-                        importLoaders: 3,
+                        importLoaders: 2,
                         modules: true,
                         getLocalIdent: getCSSModuleLocalIdent,
                     },
